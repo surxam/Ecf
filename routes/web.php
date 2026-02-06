@@ -1,11 +1,23 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
+// Redirection vers login si pas authentifié, sinon vers index
 Route::get('/', function () {
-    return view('welcome');
+    return auth()->check() ? redirect('/index') : redirect('/login');
 });
+
+// Page d'accueil protégée (index des posts)
+Route::get('/index', [PostController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('posts.index');
+
+// Vue détaillée d'un post
+Route::get('/posts/{post}', [PostController::class, 'show'])
+    ->middleware(['auth', 'verified'])
+    ->name('posts.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
