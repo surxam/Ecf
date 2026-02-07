@@ -3,113 +3,671 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body class="bg-gray-100">
-    <!-- Header -->
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <!-- Logo -->
-            <div class="text-2xl font-bold text-blue-600">Logo</div>
+    <title>Instagram-like - Actualités</title>
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #a8a8a8;
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --border-color: #333333;
+            --input-bg: #262626;
+            --btn-primary-bg: #0095f6;
+            --btn-hover-opacity: 0.8;
+            --comment-bg: #262626;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: var(--instagram-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #a8a8a8;
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--instagram-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Feed */
+        .feed {
+            flex: 1;
+            max-width: 700px;
+        }
+
+        /* Post Card */
+        .post-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--instagram-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-info h3 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .user-info span {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .post-options {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 420px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .post-actions {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .actions-left {
+            display: flex;
+            gap: 16px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .action-btn.liked {
+            color: #ed4956;
+        }
+
+        .post-stats {
+            padding: 0 16px;
+            margin-top: 12px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .post-description {
+            padding: 16px;
+            padding-top: 8px;
+        }
+
+        .post-description .author {
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .post-description .text {
+            color: var(--text-primary);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 0 16px 16px;
+        }
+
+        .comment {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--instagram-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+            background-color: var(--comment-bg);
+            padding: 10px 14px;
+            border-radius: 18px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .add-comment {
+            display: flex;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .comment-input {
+            flex: 1;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .post-comment-btn {
+            background: var(--btn-primary-bg);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .post-comment-btn:hover {
+            opacity: var(--btn-hover-opacity);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            position: sticky;
+            top: 90px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--instagram-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .profile-details h2 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-details p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .suggestions {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .suggestions-header h3 {
+            font-size: 1.1rem;
+        }
+
+        .suggestions-header a {
+            color: var(--btn-primary-bg);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .suggestions-header a:hover {
+            text-decoration: underline;
+        }
+
+        .suggestion {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--instagram-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .suggestion-info {
+            flex: 1;
+        }
+
+        .suggestion-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 3px;
+        }
+
+        .suggestion-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .follow-btn {
+            background: var(--btn-primary-bg);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .follow-btn:hover {
+            opacity: var(--btn-hover-opacity);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
             
-            <!-- Menu Hamburger -->
-            <button id="menu-toggle" class="text-gray-600 text-2xl md:hidden">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
+            .container {
+                justify-content: center;
+            }
+        }
 
-            <!-- Navigation -->
-            <nav id="nav-menu" class="hidden md:flex gap-6">
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Accueil</a>
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Profil</a>
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Messages</a>
-                <a href="#" class="text-gray-600 hover:text-blue-600 transition">Paramètres</a>
-            </nav>
-        </div>
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
+            }
+            
+            .nav-links {
+                margin: 15px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-actions {
+                margin-top: 10px;
+            }
+            
+            .container {
+                padding: 20px 10px;
+            }
+        }
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-            <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Accueil</a>
-            <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Profil</a>
-            <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Messages</a>
-            <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Paramètres</a>
-        </div>
+        @media (max-width: 480px) {
+            .post-header, .post-actions, .post-description, .comments-section {
+                padding: 12px;
+            }
+            
+            .comment-input {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+            
+            .post-comment-btn {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fab fa-instagram"></i> Instagram
+            </div>
+            
+            <div class="nav-links">
+                <a href="{{ route('posts.index') }}" class="active"><i class="fas fa-home"></i> Actualités</a>
+                <a href="{{ route('posts.index') }}"><i class="fas fa-search"></i> Explorer</a>
+                <a href="{{ route('posts.create') }}"><i class="fas fa-plus-square"></i> Créer</a>
+                <a href="{{ route('dashboard') }}"><i class="fas fa-heart"></i> Notifications</a>
+                <a href="{{ route('dashboard') }}"><i class="fas fa-user"></i> Profil</a>
+            </div>
+            
+            <div class="user-actions">
+                <a href="{{ route('profile.edit') }}" class="profile-icon">
+                    {{ strtoupper(substr(auth()->user()->username ?? auth()->user()->name ?? 'U', 0, 1)) }}
+                </a>
+            </div>
+        </nav>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Section Titre -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-8">Actualités</h1>
-
-        <!-- Posts Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @forelse($posts ?? [] as $post)
-                <!-- Post Card -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                    <!-- Image -->
-                    <div class="bg-gray-300 h-40 flex items-center justify-center">
-                        @if($post->image)
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="Post image" class="w-full h-full object-cover">
-                        @else
-                            <span class="text-gray-500 font-semibold">IMG</span>
-                        @endif
-                    </div>
-
-                    <!-- Content -->
-                    <div class="p-4">
-                        <!-- Description -->
-                        <p class="text-gray-700 text-sm font-semibold mb-2">{{ Str::limit($post->description, 60) }}</p>
-
-                        <!-- Author -->
-                        <p class="text-gray-600 text-xs mb-3">
-                            <span class="font-semibold">{{ $post->user->name ?? 'Auteur' }}</span>
-                        </p>
-
-                        <!-- Actions -->
-                        <div class="flex items-center justify-between">
-                            <!-- Likes -->
-                            <div class="flex items-center gap-2">
-                                <button class="text-red-500 hover:text-red-600 transition">
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                    </svg>
-                                </button>
-                                <span class="text-gray-600 text-sm font-semibold">{{ $post->likes_count ?? 0 }}</span>
+    <div class="container">
+        <!-- Feed -->
+        <div class="feed">
+            @forelse($posts as $post)
+                <article class="post-card">
+                    <div class="post-header">
+                        <div class="post-user">
+                            <div class="user-avatar">{{ strtoupper(substr($post->user->name ?? ($post->user->username ?? 'U'), 0, 1)) }}</div>
+                            <div class="user-info">
+                                <h3>{{ $post->user->username ?? $post->user->name ?? 'Auteur' }}</h3>
+                                <span>{{ $post->created_at?->diffForHumans() ?? '' }}</span>
                             </div>
-
-                            <!-- Comment Button -->
-                            <a href="{{ route('posts.show', $post->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-blue-600 transition">
-                                Commenter
-                            </a>
+                        </div>
+                        <div class="post-options">
+                            <i class="fas fa-ellipsis-h"></i>
                         </div>
                     </div>
-                </div>
+
+                    @if($post->image)
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="Post image" class="post-image">
+                    @else
+                        <div style="height:420px;display:flex;align-items:center;justify-content:center;background:#111;color:#999">Aucune image</div>
+                    @endif
+
+                    <div class="post-actions">
+                        <div class="actions-left">
+                            <form method="POST" action="{{ route('posts.like', $post->id) }}">
+                                @csrf
+                                <button class="action-btn" title="J'aime">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            </form>
+                            <a href="{{ route('posts.show', $post->id) }}" class="action-btn" title="Commenter">
+                                <i class="far fa-comment"></i>
+                            </a>
+                            <button class="action-btn" title="Partager">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="actions-right">
+                            <button class="action-btn" title="Enregistrer">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="post-stats">
+                        {{ number_format($post->likes_count ?? 0) }} j'aime • {{ $post->comments_count ?? 0 }} commentaires
+                    </div>
+
+                    <div class="post-description">
+                        <span class="author">{{ $post->user->username ?? $post->user->name ?? 'Auteur' }}</span>
+                        <span class="text">{{ \Illuminate\Support\Str::limit($post->caption ?? '', 300) }}</span>
+                    </div>
+
+                    <div class="comments-section">
+                        <a href="{{ route('posts.show', $post->id) }}" style="color:var(--text-secondary);text-decoration:none">Voir les commentaires et réponses</a>
+                    </div>
+                </article>
             @empty
-                <!-- Empty State -->
-                <div class="col-span-full text-center py-12">
-                    <p class="text-gray-500 text-lg">Aucun post pour le moment</p>
-                </div>
+                <p class="text-center" style="color:#aaa;padding:40px;">Aucun post pour le moment.</p>
             @endforelse
         </div>
-    </main>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-info">
+                    <div class="profile-avatar">J</div>
+                    <div class="profile-details">
+                        <h2>jean_dupont</h2>
+                        <p>Jean Dupont</p>
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-value">128</span>
+                        <span class="stat-label">Publications</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">1.2k</span>
+                        <span class="stat-label">Abonnés</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">356</span>
+                        <span class="stat-label">Abonnements</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Suggestions -->
+            <div class="suggestions">
+                <div class="suggestions-header">
+                    <h3>Suggéré pour vous</h3>
+                    <a href="#">Voir tout</a>
+                </div>
+                
+                <!-- Suggestion 1 -->
+                <div class="suggestion">
+                    <div class="suggestion-avatar">V</div>
+                    <div class="suggestion-info">
+                        <h4>voyages_du_monde</h4>
+                        <p>Suggestions pour vous</p>
+                    </div>
+                    <button class="follow-btn">Suivre</button>
+                </div>
+                
+                <!-- Suggestion 2 -->
+                <div class="suggestion">
+                    <div class="suggestion-avatar">F</div>
+                    <div class="suggestion-info">
+                        <h4>fitness_motivation</h4>
+                        <p>Populaire</p>
+                    </div>
+                    <button class="follow-btn">Suivre</button>
+                </div>
+                
+                <!-- Suggestion 3 -->
+                <div class="suggestion">
+                    <div class="suggestion-avatar">A</div>
+                    <div class="suggestion-info">
+                        <h4>art_modern</h4>
+                        <p>Nouveau sur Instagram</p>
+                    </div>
+                    <button class="follow-btn">Suivre</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p>&copy; 2026 Tous droits réservés</p>
-        </div>
+    <footer>
+        <p>© 2026 Instagram-like. Tous droits réservés.</p>
     </footer>
-
-    <script>
-        // Mobile menu toggle
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuToggle?.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-    </script>
 </body>
 </html>

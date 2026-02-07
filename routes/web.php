@@ -2,22 +2,37 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Route;
 
-// Redirection vers login si pas authentifié, sinon vers index
-Route::get('/', function () {
-    return auth()->check() ? redirect('/index') : redirect('/login');
-});
-
 // Page d'accueil protégée (index des posts)
-Route::get('/index', [PostController::class, 'index'])
+Route::get('/', [PostController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('posts.index');
+
+// Create post (must come BEFORE /posts/{post} to avoid wildcard matching)
+Route::get('/posts/create', [PostController::class, 'create'])
+    ->middleware('auth')
+    ->name('posts.create');
 
 // Vue détaillée d'un post
 Route::get('/posts/{post}', [PostController::class, 'show'])
     ->middleware(['auth', 'verified'])
     ->name('posts.show');
+
+Route::post('/posts', [PostController::class, 'store'])
+    ->middleware('auth')
+    ->name('posts.store');
+
+// Likes and comments (requires auth)
+Route::post('/posts/{post}/like', [LikeController::class, 'store'])
+    ->middleware('auth')
+    ->name('posts.like');
+
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])
+    ->middleware('auth')
+    ->name('posts.comments.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
