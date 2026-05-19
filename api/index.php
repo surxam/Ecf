@@ -1,3 +1,3 @@
 <?php
 
-echo "PHP EXECUTE OK";
+require __DIR__ . '/../public/index.php';
