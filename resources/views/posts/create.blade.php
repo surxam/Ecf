@@ -4,428 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nouveau Post - Instagram-like</title>
+    <!-- Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-dark: #0f0f0f;
-            --bg-card: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #a8a8a8;
-            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            --border-color: #333333;
-            --input-bg: #262626;
-            --btn-primary-bg: #0095f6;
-            --btn-secondary-bg: #363636;
-            --btn-hover-opacity: 0.8;
-            --upload-area-bg: #121212;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-
-        /* Header */
-        header {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 600;
-            background: var(--instagram-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .page-title {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 40px;
-            background: var(--instagram-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Error/Success Messages */
-        .alert {
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert-error {
-            background-color: rgba(237, 73, 86, 0.1);
-            border: 1px solid #ed4956;
-            color: #ff6b7a;
-        }
-
-        .alert-success {
-            background-color: rgba(31, 150, 102, 0.1);
-            border: 1px solid #1f9666;
-            color: #31a24c;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        /* Form Card */
-        .form-card {
-            background-color: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Image Upload Section */
-        .upload-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px;
-            border: 2px dashed var(--border-color);
-            border-radius: 12px;
-            background-color: var(--upload-area-bg);
-            min-height: 300px;
-            transition: all 0.3s;
-            margin-bottom: 30px;
-            cursor: pointer;
-        }
-
-        .upload-section:hover {
-            border-color: #555;
-        }
-
-        .upload-section.dragover {
-            border-color: var(--btn-primary-bg);
-            background-color: rgba(0, 149, 246, 0.1);
-        }
-
-        .upload-icon {
-            font-size: 4rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .upload-text {
-            color: var(--text-primary);
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .upload-subtext {
-            color: var(--text-secondary);
-            text-align: center;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        .file-input-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .file-input {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .upload-btn {
-            background-color: var(--btn-primary-bg);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-        }
-
-        .upload-btn:hover {
-            opacity: var(--btn-hover-opacity);
-        }
-
-        /* Image Preview */
-        .image-preview {
-            display: none;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .image-preview.show {
-            display: block;
-        }
-
-        .image-preview img {
-            width: 100%;
-            max-height: 400px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
-        .preview-actions {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .remove-image-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .remove-image-btn:hover {
-            opacity: var(--btn-hover-opacity);
-        }
-
-        /* Form Section */
-        .form-section {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .label-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .char-count {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #555;
-        }
-
-        .form-input.error {
-            border-color: #ed4956;
-        }
-
-        .caption-input {
-            min-height: 100px;
-            resize: vertical;
-            font-family: inherit;
-            line-height: 1.5;
-        }
-
-        .hashtag-input {
-            font-family: inherit;
-        }
-
-        .error-text {
-            color: #ff6b7a;
-            font-size: 0.85rem;
-            margin-top: 6px;
-            display: none;
-        }
-
-        .error-text.show {
-            display: block;
-        }
-
-        .hashtag-hint {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 8px;
-        }
-
-        /* Submit Section */
-        .submit-section {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 40px;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-secondary {
-            background-color: var(--btn-secondary-bg);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background-color: #444;
-        }
-
-        .btn-primary {
-            background-color: var(--btn-primary-bg);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            opacity: var(--btn-hover-opacity);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            border-top: 1px solid var(--border-color);
-            margin-top: 40px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .navbar {
-                justify-content: center;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-            }
-            
-            .container {
-                padding: 30px 15px;
-            }
-            
-            .form-card {
-                padding: 30px 20px;
-            }
-            
-            .upload-section {
-                min-height: 250px;
-                padding: 20px;
-            }
-            
-            .upload-icon {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-title {
-                font-size: 1.7rem;
-                margin-bottom: 30px;
-            }
-            
-            .upload-text {
-                font-size: 1.1rem;
-            }
-            
-            .form-label {
-                font-size: 1rem;
-            }
-            
-            .submit-section {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <nav class="navbar">
-            <a href="{{ route('posts.index') }}" class="logo" style="text-decoration:none">
+<body class="bg-[#0f0f0f] text-white min-h-screen font-[-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,Helvetica,Arial,sans-serif]">
+
+    <!-- Header avec menu de navigation -->
+    <header class="bg-[#1a1a1a] border-b border-[#333333] px-5 sticky top-0 z-100">
+        <nav class="flex flex-col md:flex-row justify-between items-center h-auto md:h-[60px] max-w-[1200px] mx-auto py-4 md:py-0">
+            <a href="{{ route('posts.index') }}" class="text-[1.8rem] font-semibold bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] bg-clip-text text-transparent no-underline">
                 <i class="fab fa-instagram"></i> Instagram
             </a>
+            
+            <div class="flex gap-6 flex-wrap justify-center my-4 md:my-0">
+                <a href="{{ route('posts.index') }}" class="text-[#a8a8a8] hover:text-white text-[1.1rem] transition-colors duration-300"><i class="fas fa-home"></i> Actualités</a>
+                <a href="{{ route('posts.create') }}" class="text-white font-semibold text-[1.1rem]"><i class="fas fa-plus-square"></i> Nouveau Post</a>
+                <a href="#" class="text-[#a8a8a8] hover:text-white text-[1.1rem] transition-colors duration-300"><i class="fas fa-search"></i> Explorer</a>
+                <a href="#" class="text-[#a8a8a8] hover:text-white text-[1.1rem] transition-colors duration-300"><i class="fas fa-heart"></i> Notifications</a>
+                <a href="{{ route('dashboard') }}" class="text-[#a8a8a8] hover:text-white text-[1.1rem] transition-colors duration-300"><i class="fas fa-user"></i> Profil</a>
+            </div>
+            
+            <div class="flex items-center gap-4 mt-4 md:mt-0">
+                <a href="{{ route('profile.edit') }}" class="w-[30px] h-[30px] rounded-full bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] flex items-center justify-center text-white font-bold">
+                    {{ substr(auth()->user()->username, 0, 1) }}
+                </a>
+            </div>
         </nav>
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-        <h1 class="page-title">📸 Nouveau Post</h1>
+    <div class="max-w-[600px] mx-auto px-5 md:px-5 px-[15px] pt-10 md:pt-10 pt-[30px] pb-[60px] md:pb-[60px] pb-[30px]">
+        
+        <h1 class="text-2xl md:text-2xl text-[1.7rem] text-center mb-10 md:mb-10 mb-[30px] bg-gradient-to-r from-[#f09433] via-[#dc2743] to-[#bc1888] bg-clip-text text-transparent font-semibold">
+            📸 Nouveau Post
+        </h1>
 
         @if($errors->any())
-            <div class="alert alert-error show">
-                <ul style="margin: 0; padding-left: 20px;">
+            <div class="p-4 rounded-lg mb-5 block bg-[rgba(237,73,86,0.1)] border border-[#ed4956] text-[#ff6b7a]">
+                <ul class="m-0 pl-5">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -433,83 +51,85 @@
             </div>
         @endif
 
-        <div id="successAlert" class="alert alert-success">
+        <div id="successAlert" class="hidden p-4 rounded-lg mb-5 bg-[rgba(31,150,102,0.1)] border border-[#1f9666] text-[#31a24c]">
             ✅ Post créé avec succès !
         </div>
         
-        <div class="form-card">
+        <div class="bg-[#1a1a1a] rounded-2xl border border-[#333333] p-10 md:p-10 p-[30px_20px] shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
             <form id="createPostForm" method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Image Upload Section -->
-                <div id="uploadSection" class="upload-section">
-                    <div class="upload-icon">
+                <div id="uploadSection" class="flex flex-col items-center justify-center p-[30px] md:p-[30px] p-5 border-2 border-dashed border-[#333333] rounded-xl bg-[#121212] min-h-[300px] md:min-h-[300px] min-h-[250px] transition-all duration-300 cursor-pointer mb-8 hover:border-[#555]">
+                    <div class="text-5xl md:text-5xl text-4xl text-[#a8a8a8] mb-5">
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
-                    <div class="upload-text">Téléverser une image</div>
-                    <div class="upload-subtext">
+                    <div class="text-white text-xl md:text-xl text-[1.1rem] font-semibold mb-2.5">
+                        Téléverser une image
+                    </div>
+                    <div class="text-[#a8a8a8] text-center mb-8 leading-relaxed">
                         Cliquez ou glissez une image<br>
                         Formats acceptés : JPG, PNG, GIF (max 2MB)
                     </div>
-                    <div class="file-input-container">
-                        <input type="file" id="imageInput" name="image" class="file-input" accept="image/*" required>
-                        <button type="button" class="upload-btn">
+                    <div class="relative inline-block">
+                        <input type="file" id="imageInput" name="image" class="absolute left-0 top-0 opacity-0 w-full h-full cursor-pointer" accept="image/*" required>
+                        <button type="button" class="bg-[#0095f6] text-white border-none rounded-lg px-6 py-3 text-base font-semibold cursor-pointer transition-opacity duration-300 hover:opacity-80 inline-flex items-center gap-2.5 relative">
                             <i class="fas fa-image"></i> Choisir une image
                         </button>
                     </div>
                 </div>
 
                 <!-- Image Preview -->
-                <div id="imagePreview" class="image-preview">
-                    <img id="previewImg" src="" alt="Aperçu">
-                    <div class="preview-actions">
-                        <button type="button" class="remove-image-btn" id="removeImageBtn">
+                <div id="imagePreview" class="hidden w-full mb-5">
+                    <img id="previewImg" src="" alt="Aperçu" class="w-full max-h-[400px] rounded-lg object-cover">
+                    <div class="mt-2.5 text-center">
+                        <button type="button" id="removeImageBtn" class="bg-[#e74c3c] text-white border-none rounded-lg px-4 py-2 text-sm cursor-pointer transition-opacity duration-300 hover:opacity-80">
                             <i class="fas fa-trash"></i> Supprimer l'image
                         </button>
                     </div>
                 </div>
                 
                 <!-- Form Section -->
-                <div class="form-section">
-                    <div class="form-group">
-                        <div class="label-info">
-                            <label for="caption" class="form-label">Caption</label>
-                            <span class="char-count"><span id="captionCount">0</span>/1000</span>
+                <div class="flex flex-col">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2.5">
+                            <label for="caption" class="font-semibold text-[1.1rem] md:text-[1.1rem] text-base">Caption</label>
+                            <span class="text-[0.85rem] text-[#a8a8a8]"><span id="captionCount">0</span>/1000</span>
                         </div>
                         <textarea 
                             id="caption" 
                             name="caption" 
-                            class="form-input caption-input" 
+                            class="w-full p-[14px_16px] bg-[#262626] border border-[#333333] rounded-lg text-white text-base transition-colors duration-300 focus:outline-none focus:border-[#555] min-h-[100px] resize-y font-inherit leading-relaxed"
                             placeholder="Écrivez une légende pour votre post..."
                             rows="4"
                             maxlength="1000"
                         ></textarea>
-                        <div class="error-text" id="captionError"></div>
+                        <div class="text-[#ff6b7a] text-[0.85rem] mt-1.5 hidden" id="captionError"></div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="hashtags" class="form-label">Hashtags</label>
+                    <div class="mb-6">
+                        <label for="hashtags" class="block mb-2.5 font-semibold text-[1.1rem] md:text-[1.1rem] text-base">Hashtags</label>
                         <input 
                             type="text" 
                             id="hashtags" 
                             name="hashtags" 
-                            class="form-input hashtag-input" 
+                            class="w-full p-[14px_16px] bg-[#262626] border border-[#333333] rounded-lg text-white text-base transition-colors duration-300 focus:outline-none focus:border-[#555] font-inherit"
                             placeholder="#exemple #instagram #photographie"
                             maxlength="255"
                         >
-                        <div class="hashtag-hint">
+                        <div class="text-[#a8a8a8] text-[0.9rem] mt-2">
                             💡 Séparez les hashtags par des espaces
                         </div>
-                        <div class="error-text" id="hashtagsError"></div>
+                        <div class="text-[#ff6b7a] text-[0.85rem] mt-1.5 hidden" id="hashtagsError"></div>
                     </div>
                 </div>
                 
                 <!-- Submit Section -->
-                <div class="submit-section">
-                    <a href="{{ route('posts.index') }}" class="btn btn-secondary">
+                <div class="flex md:flex-row flex-col justify-end mt-10 gap-4">
+                    <a href="{{ route('posts.index') }}" class="md:w-auto w-full px-7 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 bg-[#363636] text-white hover:bg-[#444] text-center no-underline">
                         <i class="fas fa-times"></i> Annuler
                     </a>
-                    <button type="submit" id="submitBtn" class="btn btn-primary" disabled>
+                    <button type="submit" id="submitBtn" class="md:w-auto w-full px-7 py-3 border-none rounded-lg text-base font-semibold cursor-pointer transition-all duration-300 bg-[#0095f6] text-white hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
                         <i class="fas fa-paper-plane"></i> Publier
                     </button>
                 </div>
@@ -518,9 +138,43 @@
     </div>
 
     <!-- Footer -->
-    <footer>
+    <footer class="text-center p-5 text-[#a8a8a8] text-sm border-t border-[#333333] mt-10">
         <p>© 2026 Instagram-like. Tous droits réservés.</p>
     </footer>
+
+    <style>
+        .z-100 { z-index: 100; }
+        
+        .upload-section.dragover {
+            border-color: #0095f6 !important;
+            background-color: rgba(0, 149, 246, 0.1) !important;
+        }
+        
+        .error-text.show {
+            display: block !important;
+        }
+        
+        .image-preview.show {
+            display: block !important;
+        }
+        
+        .alert.show {
+            display: block !important;
+        }
+        
+        @media (max-width: 768px) {
+            .md\:text-[1.1rem] { font-size: 1rem; }
+            .md\:p-10 { padding: 30px 20px; }
+            .md\:min-h-[300px] { min-height: 250px; }
+            .md\:text-5xl { font-size: 3rem; }
+            .md\:text-2xl { font-size: 1.7rem; }
+            .md\:px-5 { padding-left: 15px; padding-right: 15px; }
+            .md\:pt-10 { padding-top: 30px; }
+            .md\:pb-[60px] { padding-bottom: 30px; }
+            .md\:mb-10 { margin-bottom: 30px; }
+            .md\:text-[1.8rem] { font-size: 1.5rem; }
+        }
+    </style>
 
     <script>
         const imageInput = document.getElementById('imageInput');
@@ -533,6 +187,8 @@
         const hashtagsInput = document.getElementById('hashtags');
         const submitBtn = document.getElementById('submitBtn');
         const form = document.getElementById('createPostForm');
+        const captionError = document.getElementById('captionError');
+        const hashtagsError = document.getElementById('hashtagsError');
 
         // Drag & Drop
         uploadSection.addEventListener('dragover', (e) => {
@@ -566,27 +222,24 @@
             const file = imageInput.files[0];
             if (!file) return;
 
-            // Validate file type
             if (!file.type.startsWith('image/')) {
-                showError('captionError', 'Veuillez sélectionner une image valide');
+                showError(captionError, 'Veuillez sélectionner une image valide');
                 imageInput.value = '';
                 return;
             }
 
-            // Validate file size (2MB)
             if (file.size > 2 * 1024 * 1024) {
-                showError('captionError', 'L\'image doit faire moins de 2MB');
+                showError(captionError, 'L\'image doit faire moins de 2MB');
                 imageInput.value = '';
                 return;
             }
 
-            // Show preview
             const reader = new FileReader();
             reader.onload = (e) => {
                 previewImg.src = e.target.result;
                 uploadSection.style.display = 'none';
                 imagePreview.classList.add('show');
-                clearError('captionError');
+                clearError(captionError);
                 checkFormValidity();
             };
             reader.readAsDataURL(file);
@@ -607,42 +260,36 @@
             checkFormValidity();
         });
 
-        // Form validation
         function checkFormValidity() {
             const hasImage = imageInput.files.length > 0;
             const hasCaption = captionInput.value.trim().length > 0;
             submitBtn.disabled = !(hasImage && hasCaption);
         }
 
-        function showError(elementId, message) {
-            const errorEl = document.getElementById(elementId);
-            errorEl.textContent = message;
-            errorEl.classList.add('show');
+        function showError(element, message) {
+            element.textContent = message;
+            element.classList.add('show');
         }
 
-        function clearError(elementId) {
-            const errorEl = document.getElementById(elementId);
-            errorEl.classList.remove('show');
+        function clearError(element) {
+            element.classList.remove('show');
         }
 
-        // Form submission
         form.addEventListener('submit', (e) => {
-            // Basic validation
             if (!imageInput.files.length) {
                 e.preventDefault();
-                showError('captionError', 'Veuillez sélectionner une image');
+                showError(captionError, 'Veuillez sélectionner une image');
                 return;
             }
             if (!captionInput.value.trim()) {
                 e.preventDefault();
-                showError('captionError', 'La caption est obligatoire');
+                showError(captionError, 'La caption est obligatoire');
                 return;
             }
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publication...';
         });
 
-        // Initialize
         checkFormValidity();
     </script>
 </body>
